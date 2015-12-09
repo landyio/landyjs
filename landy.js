@@ -8,8 +8,7 @@ var landy = (function (w, d, n) {
     count = {},
     hasOwnProperty = Object.prototype.hasOwnProperty,
     modelId,
-    predictUrl = w.location.protocol !== "https:" ? "http://zax.landy.io:80" : "https://zax.landy.io:443",
-    // predictUrl = w.location.protocol !== "https:" ? "http://192.168.99.100:9180" : "http://192.168.99.100:9180",
+    predictUrl = w.location.protocol !== "https:" ? "http://zax.landy.io" : "https://zax.landy.io",
     type,
     subtype;
 
@@ -538,12 +537,17 @@ var landy = (function (w, d, n) {
             var resp = JSON.parse(xhr.responseText);
             if (resp.variation) {
               var value = JSON.parse(resp.variation.value),
-                els = value.elements || value.url;
-              //set uid
-              setUid();
-              //set cookie for nex variations
-              c(vid, els, 360);
-              callback(els);
+                content;
+              if (value.elements) content = value.elements;
+              if (value.url) content = value;
+
+              if (content) {
+                //set uid
+                setUid();
+                //set cookie for nex variations
+                c(vid, JSON.stringify(content), 360);
+                callback(content);
+              }
             }
           }
         }
@@ -820,7 +824,7 @@ var landy = (function (w, d, n) {
         urlIsCorrect = (subtype == "contains" && w.location.href.indexOf(url) > -1) || checkUrls(w.location.href, url);
 
       //function, which applies attributes, styles and html to element
-      var T = function (sel, attrs, styles, html) {
+      var applyProperties = function (sel, attrs, styles, html) {
         var ac = d.querySelectorAll(sel);
         if (!ac.length) {
           return console.log("We could not find " + sel + " !")
@@ -834,7 +838,7 @@ var landy = (function (w, d, n) {
           for (key in styles) {
             aa.style[key] = styles[key];
           }
-          if (typeof html != "undefined") {
+          if (typeof html !== "undefined") {
             aa.innerHTML = unescapeHtml(html);
           }
 
@@ -864,18 +868,11 @@ var landy = (function (w, d, n) {
         // a/b mode
         for (max = elements.length, i = max - 1; i >= 0; i -= 1) {
           element = JSON.parse(elements[i]);
-          if (typeof element.attributes != "undefined") {
-            attrs = element.attributes;
-          }
-          if (typeof element.styles != "undefined") {
-            styles = element.styles;
-          }
+          attrs = element.attributes || {};
+          styles = element.styles || {};
+          html = element.html || "";
 
-          if (typeof element.html != "undefined") {
-            html = element.html;
-          }
-
-          K(element.selector, attrs, styles, html, T);
+          K(element.selector, attrs, styles, html, applyProperties);
         }
       };
 
