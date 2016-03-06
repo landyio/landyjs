@@ -1,0 +1,23 @@
+{
+  "extends": "eslint-config-airbnb-es5",
+  "env": {
+    "browser": true,
+    "jasmine": true
+  },
+
+  "rules": {
+    "quotes": [2, "single"],
+    "eol-last": [0],
+    "no-mixed-requires": [0],
+    "no-underscore-dangle": [0],
+    "no-extra-strict": 0,
+    "strict": 0,
+    "curly": [0],
+    "valid-jsdoc": [2, {
+    	"requireReturn": false
+	}],
+	"indent": [2, 2, {"SwitchCase": 1}],
+	"react/jsx-quotes": 0,
+    "jsx-quotes": [2, "prefer-double"]
+  }
+}

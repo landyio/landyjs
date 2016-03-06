@@ -1,0 +1,26 @@
+{
+  "name": "landyjs",
+  "version": "1.0.0",
+  "description": "Landy analytics script",
+  "main": "landy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/dtsepelev/landy.js.git"
+  },
+  "author": "Dmitry Tsepelev",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/dtsepelev/landy.js#readme",
+  "devDependencies": {
+    "babel-eslint": "^5.0.0",
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb-es5": "^1.0.8",
+    "eslint-plugin-react": "^4.1.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jasmine": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.0",
+    "jasmine-ajax": "^3.2.0"
+  }
+}
