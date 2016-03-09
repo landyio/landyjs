@@ -114,13 +114,13 @@ describe('landy.js', function() {
 
         describe('should properly apply', function() {
           it('changes to html content', function() {
-            var selector = ':nth-child(4) > :nth-child(1) > h1';
+            var selector = ':nth-child(2) > :nth-child(1) > h1';
             var h1Content = $(selector).html();
             expect(h1Content.indexOf('Tool<br> or not to tool')).toBe(-1);
           });
 
           it('background-color style', function() {
-            var selector = ':nth-child(4) > :nth-child(1) > a';
+            var selector = 'body > :nth-child(2) > :nth-child(1) > a';
             var buttonColor = $(selector).css('background-color');
             expect(buttonColor).not.toEqual('rgb(136, 136, 136)');
           });
@@ -207,15 +207,23 @@ describe('landy.js', function() {
         });
 
 
+        it('should send proper request body', function() {
+          var body = requestOnCorrectUrl.data();
+          expect(typeof (body.identity)).toEqual('object');
+          expect(body.identity.browser).toEqual('PhantomJS');
+          expect(typeof (body.timestamp)).toEqual('number');
+          expect(uid.length).toEqual(36);
+        });
+
         describe('should properly apply', function() {
           it('changes to html content', function() {
-            var selector = ':nth-child(4) > :nth-child(1) > h1';
+            var selector = ':nth-child(2) > :nth-child(1) > h1';
             var h1Content = $(selector).html();
             expect(h1Content.indexOf('Tool<br> or not to tool')).not.toBe(-1);
           });
 
           it('background-color style', function() {
-            var selector = ':nth-child(4) > :nth-child(1) > a';
+            var selector = 'body > :nth-child(2) > :nth-child(1) > a';
             var buttonColor = $(selector).css('background-color');
             expect(buttonColor).toEqual('rgb(136, 136, 136)');
           });
@@ -330,7 +338,7 @@ describe('landy.js', function() {
           data = {
             goals: [{
               'event': 'click',
-              'value': ':nth-child(4) > :nth-child(1) > h1',
+              'value': ':nth-child(2) > :nth-child(1) > h1',
               'type': 'contains'
             }],
             modelId: '1146c3cc98ffed3bc271ff15',

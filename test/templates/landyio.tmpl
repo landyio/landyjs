@@ -33,17 +33,13 @@
     saveParameter('medium', medium);
   }
   </script>
-  <script type="text/javascript">
-  var clean_uri = location.protocol + "//" + location.host + location.pathname;
-  window.history.replaceState({}, document.title, clean_uri);
-  </script>
-  <!-- Landy -->
+  <!-- Jasmine script -->
    <% with (scripts) { %>
   <% [].concat(polyfills, jasmine, boot, vendor, helpers, src, specs, reporters).forEach(function(script){ %>
   <script type="text/javascript" src="<%= script %>"></script>
   <% }) %>
   <% }; %>
-  <!-- End Landy -->
+  <!-- End Jasmine script -->
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -78,27 +74,6 @@
 </head>
 
 <body>
-  <!-- Google Tag Manager -->
-  <noscript>
-    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MFRZWQ" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-  </noscript>
-  <script>
-  (function(w, d, s, l, i) {
-    w[l] = w[l] || [];
-    w[l].push({
-      'gtm.start': new Date().getTime(),
-      event: 'gtm.js'
-    });
-    var f = d.getElementsByTagName(s)[0],
-      j = d.createElement(s),
-      dl = l != 'dataLayer' ? '&l=' + l : '';
-    j.async = true;
-    j.src =
-      '//www.googletagmanager.com/gtm.js?id=' + i + dl;
-    f.parentNode.insertBefore(j, f);
-  })(window, document, 'script', 'dataLayer', 'GTM-MFRZWQ');
-  </script>
-  <!-- End Google Tag Manager -->
   <header class="main-header">
     <div class="container">
       <a href="/" class="logo">
