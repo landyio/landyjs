@@ -64,8 +64,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-zopfli');
 
   grunt.registerTask('test', ['connect', 'jasmine']);
-  grunt.registerTask('build', ['test', 'strip_code', 'uglify', 'zopfli'])
-  grunt.registerTask('strip', ['strip_code'])
+  grunt.registerTask('build', ['test', 'strip_code', 'uglify', 'zopfli']);
 
   // Default task(s).
   grunt.registerTask('default', ['test']);
