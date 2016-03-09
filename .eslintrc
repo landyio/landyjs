@@ -2,7 +2,10 @@
   "extends": "eslint-config-airbnb-es5",
   "env": {
     "browser": true,
-    "jasmine": true
+    "jasmine": true,
+    "node": true,
+    "phantomjs": true,
+    "jquery": true
   },
 
   "rules": {

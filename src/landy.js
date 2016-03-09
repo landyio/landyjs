@@ -1192,7 +1192,7 @@
  * @param  {String} href Url
  * @return {Object}      Parsed url object
  */
-function parseUrl(href) {
+function landyParseUrl(href) {
   var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)(\/[^?#]*)(\?[^#]*|)(#.*|)$/);
   return match && {
     protocol: match[1],
@@ -1212,7 +1212,7 @@ function parseUrl(href) {
  * @param  {String} compareType  Type of comparison
  * @return {Boolean}      does url matches
  */
-function checkUrls(url1, url2, compareType) {
+function landyCheckUrls(url1, url2, compareType) {
   var result;
   switch (compareType) {
     case 'contains':
@@ -1222,8 +1222,8 @@ function checkUrls(url1, url2, compareType) {
       result = (url1 === url2);
       break;
     case 'simpleMatches':
-      var parsedUrl1 = parseUrl(url1);
-      var parsedUrl2 = parseUrl(url2);
+      var parsedUrl1 = landyParseUrl(url1);
+      var parsedUrl2 = landyParseUrl(url2);
       result = (parsedUrl1.hostname === parsedUrl2.hostname &&
         parsedUrl1.pathname === parsedUrl2.pathname);
       break;
@@ -1234,13 +1234,13 @@ function checkUrls(url1, url2, compareType) {
   return result;
 }
 
-function Landy(campaignId, userId, url, type, subtype, goals) {
-  var zaxUrl = 'http://192.168.99.100:9180';
+function Landy(campaignId, url, type, subtype, goals) {
+  var zaxUrl = '//zax.landy.io';
 
-  var _userIdKey = '_landyUID';
-  var _variationsKey = '_landyVariation';
-  var _goalsKey = '_landySuccess';
-  var _timeStorageExpireId = '_landyExpire';
+  var userIdKey = '_landyUID';
+  var variationsKey = '_landyVariation';
+  var goalsKey = '_landySuccess';
+  var timeStorageExpireId = '_landyExpire';
 
   var w = window;
   var d = document;
@@ -1256,15 +1256,14 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
 
   function checkStorageExpire() {
     var timestamp = new Date();
-    return timestamp.getTime() - localStorage.getItem(_timeStorageExpireId) < 0;
+    return timestamp.getTime() - localStorage.getItem(timeStorageExpireId) < 0;
   }
 
   // Get cookie or localStorage(for variations) variable
   function getCookie(value) {
     var name = value + '_' + campaignId;
     var result;
-
-    if (supportsLocalStorage(w) && value === _variationsKey) {
+    if (supportsLocalStorage(w) && value === variationsKey) {
       if (checkStorageExpire()) result = localStorage.getItem(name);
     } else {
       var m = d.cookie.match(new RegExp(
@@ -1272,7 +1271,6 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
       ));
       if (m) result = decodeURIComponent(m[1]);
     }
-
     return result;
   }
 
@@ -1282,14 +1280,13 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
     var timestamp = new Date();
     var timeExpire = timestamp.getTime() + (lifetime * 24 * 60 * 60 * 1000);
 
-    if (supportsLocalStorage(w) && cookieName === _variationsKey) {
+    if (supportsLocalStorage(w) && cookieName === variationsKey) {
       localStorage.setItem(name, value);
-      localStorage.setItem(_timeStorageExpireId, timeExpire);
+      localStorage.setItem(timeStorageExpireId, timeExpire);
     } else {
       timestamp.setTime(timeExpire);
       var expires = 'expires=' + timestamp.toUTCString();
-      // TODO: (dtsepelev) add . (dot) after domain=
-      var cookie = name + '=' + value + ';path=/;domain=' + d.domain + ';' + expires;
+      var cookie = name + '=' + value + ';path=/;domain=.' + d.domain + ';' + expires;
       d.cookie = cookie;
     }
   }
@@ -1305,7 +1302,6 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
     if (xhr) {
       xhr.open('POST', requestURL, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
-
       xhr.onreadystatechange = function onreadystatechange() {
         if (xhr.readyState === 4 && xhr.status === 200) {
           var resp = (xhr.responseText) ? JSON.parse(xhr.responseText) : true;
@@ -1323,12 +1319,13 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
 
 
   /**
-   * Send success if visitor did not reach
-   * the goal before and participate in Campaign
+   * Sends success if visitor did not reach
+   * the goal previosly and has visited original
+   * campaign URL
    */
   function sendSuccess() {
-    var uidInCookie = getCookie(_userIdKey);
-    if (!getCookie(_goalsKey) && uidInCookie) {
+    var uidInCookie = getCookie(userIdKey);
+    if (!getCookie(goalsKey) && uidInCookie) {
       var data = {
         session: uidInCookie,
         timestamp: Date.now()
@@ -1337,7 +1334,7 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
       var requestURL = zaxUrl + '/app/' + campaignId + '/event/finish';
 
       doPostRequest(requestURL, JSON.stringify(data), function setSuccessCookie() {
-        setCookie(_goalsKey, true, 30);
+        setCookie(goalsKey, true, 30);
       });
     }
   }
@@ -1350,14 +1347,12 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
    * @return {Function} Function which sets listener
    */
   function setListener(selector) {
-    return function() {
+    return function listenerSetter() {
       var i;
       var max;
       var els = d.querySelectorAll(selector);
-
       for (max = els.length, i = max - 1; i >= 0; i -= 1) {
-        // els[i].addEventListener('click', sendSuccess, false);
-        els[i].addEventListener('click', sendSuccess(), false);
+        els[i].addEventListener('click', sendSuccess, false);
       }
     };
   }
@@ -1521,7 +1516,7 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
    * @param  {Object} styles style to update
    * @param  {String} html   content inside selector
    *                          element to update
-   * @param  {Function} func   [description]
+   * @param  {Function} func   callback
    */
   function findElements(sel, attrs, styles, html, func) {
     if (typeof count[sel] === 'undefined') {
@@ -1608,10 +1603,18 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
     }
   }
 
+  /**
+   * Initialize Landy. Checks that script executed
+   * on the correct url, request variations, save them
+   * to cookies and apply to the page. If the goal is
+   * reached, sends success to the zax and save state
+   * to cookies.
+   * @param  {Function} callback Callback for testing purpose
+   */
   this.init = function init() {
     // Get uid from cookie and generate if it does not exists
     // TODO: (dtsepelev) Not sure how showd it work on cross-domain
-    var uid = getCookie(_userIdKey) || generateUid();
+    var uid = getCookie(userIdKey) || generateUid();
 
     var data = {
       'session': uid,
@@ -1620,14 +1623,14 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
     };
 
     // Check that it is url of landing page
-    var urlIsCorrect = checkUrls(w.location.href, url, subtype);
+    var urlIsCorrect = landyCheckUrls(w.location.href, url, subtype);
 
     if (urlIsCorrect) {
       // Check if variation is in cookie
-      var cookie = getCookie(_variationsKey);
+      var cookie = getCookie(variationsKey);
 
       // Make a response to ZAX, if variation is not in cookie
-      if (!cookie) {
+      if (!cookie || cookie === '[]') {
         var requestURL = zaxUrl + '/app/' + campaignId + '/event/predict';
         doPostRequest(requestURL, JSON.stringify(data), function saveAndApplyVariation(response) {
           if (response) {
@@ -1644,8 +1647,8 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
                 return;
             }
             applyVariation(variationInResponse);
-            setCookie(_userIdKey, uid, 360);
-            setCookie(_variationsKey, JSON.stringify(variationInResponse), 30);
+            setCookie(userIdKey, uid, 360);
+            setCookie(variationsKey, JSON.stringify(variationInResponse), 30);
           }
         });
       } else {
@@ -1662,13 +1665,15 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
         var goal = goals[i];
         switch (goal.event) {
           case 'visit':
-            if (checkUrls(goal.value, w.location.href, goal.type)) {
+            if (landyCheckUrls(goal.value, w.location.href, goal.type)) {
               sendSuccess();
             }
             break;
 
           case 'click':
-            w.addEventListener('load', setListener(goal.value), false);
+            if (urlIsCorrect) {
+              w.addEventListener('load', setListener(goal.value), false);
+            }
             break;
           default:
             return;
@@ -1676,4 +1681,20 @@ function Landy(campaignId, userId, url, type, subtype, goals) {
       }
     }
   };
+  /* test-code */
+  var api = {};
+  api._doPostRequest = doPostRequest;
+  api._sendSuccess = sendSuccess;
+  api._setListener = setListener;
+  api._getCookie = getCookie;
+  api._generateUid = generateUid;
+  api._generateIdentity = generateIdentity;
+  api._unescapeHtml = unescapeHtml;
+  api._zaxUrl = zaxUrl;
+  api._userIdKey = userIdKey;
+  api._variationsKey = variationsKey;
+  api._goalsKey = goalsKey;
+  api._timeStorageExpireId = timeStorageExpireId;
+  this.api = api;
+  /* end-test-code */
 }
