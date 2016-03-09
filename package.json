@@ -19,12 +19,13 @@
     "eslint-config-airbnb-es5": "^1.0.8",
     "eslint-plugin-react": "^4.1.0",
     "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.0",
     "grunt-contrib-connect": "^1.0.0",
     "grunt-contrib-jasmine": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.0",
     "grunt-strip-code": "^0.1.2",
     "grunt-zopfli": "^0.3.2",
-    "jasmine-ajax": "^3.2.0",
-    "open": "0.0.5"
+    "jasmine-ajax": "^3.2.0"
   }
 }

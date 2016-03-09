@@ -1,27 +1,40 @@
 module.exports = function(grunt) {
 
-  // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
+
+    concat: {
+      dist: {
+        src: ['src/uaparser.js', 'src/landy.js'],
+        dest: 'temp/landy.js',
+      },
+    },
+
+
     strip_code: {
       options: {
         start_comment: "test-code",
         end_comment: "end-test-code",
       },
       target: {
-        src: "src/landy.js",
-        dest: "build/landy.js"
+        src: "temp/landy.js",
+        dest: "temp/landy.js"
       }
     },
+
+
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: 'build/landy.js',
+        src: 'temp/landy.js',
         dest: 'build/landy.min.js'
       }
     },
+
+
     zopfli: {
       'compress-plugins': {
         files: {
@@ -29,9 +42,17 @@ module.exports = function(grunt) {
         }
       }
     },
+
+
+    clean: {
+      js: ["build/*.js", "!build/*.min.js"],
+      temp: 'temp'
+    },
+
+
     jasmine: {
       landy: {
-        src: 'src/landy.js',
+        src: 'src/*.js',
         options: {
           specs: 'test/spec/*.js',
           template: 'test/templates/landyio.tmpl',
@@ -46,6 +67,8 @@ module.exports = function(grunt) {
         }
       }
     },
+
+
     connect: {
       tests: {
         options: {
@@ -56,17 +79,19 @@ module.exports = function(grunt) {
     }
   });
 
-  // Load the plugin that provides the "uglify" task.
+
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-strip-code');
   grunt.loadNpmTasks('grunt-zopfli');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+
 
   grunt.registerTask('test', ['connect', 'jasmine']);
-  grunt.registerTask('build', ['test', 'strip_code', 'uglify', 'zopfli']);
-
-  // Default task(s).
+  grunt.registerTask('build', ['test', 'concat', 'strip_code', 'uglify', 'clean']);
+  grunt.registerTask('deploy', ['build', 'zopfli'])
   grunt.registerTask('default', ['test']);
 
 };
