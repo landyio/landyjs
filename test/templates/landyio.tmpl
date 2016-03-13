@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script type="text/javascript">
+  if (document.cookie.indexOf('_lsource') === -1) {
+    function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    var source = getParameterByName('utm_source') || getParameterByName('ref'),
+      campaign = getParameterByName('utm_campaign'),
+      medium = getParameterByName('utm_medium'),
+      maxAge = 60 * 60 * 24 * 180;
+
+    if (!source && !!document.referrer) {
+      var url = document.referrer;
+      source = url.match(/:\/\/(.[^/]+)/)[1];
+    }
+
+    function saveParameter(name, value) {
+      if (value) {
+        document.cookie = '_l' + name + '=' + value +
+          '; max-age=' + maxAge + '; path=/; domain=.landy.io';
+      }
+    }
+
+    saveParameter('source', source);
+    saveParameter('campaign', campaign);
+    saveParameter('medium', medium);
+  }
+  </script>
+  <!-- Jasmine script -->
+   <% with (scripts) { %>
+  <% [].concat(polyfills, jasmine, boot, vendor, helpers, src, specs, reporters).forEach(function(script){ %>
+  <script type="text/javascript" src="<%= script %>"></script>
+  <% }) %>
+  <% }; %>
+  <!-- End Jasmine script -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Landy is an essentially new way to deliver the best possible landing page to every new visitor. Effortlessly and automatically.">
+  <meta property="og:image" content="assets/images/logo_facebook.png" />
+  <meta property="og:title" content="Landy: Put your growth on autopilot." />
+  <meta name="og:description" content="Landy is an essentially new way to deliver the best possible landing page to every new visitor. Effortlessly and automatically.">
+  <link rel="stylesheet" href="assets/css/styles.min.14566980363.css" />
+  <link rel="stylesheet" href="assets/css/normalize.min.css" />
+  <link rel="apple-touch-icon" sizes="57x57" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/android-chrome-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/manifest.json">
+  <link rel="shortcut icon" href="https://d2xkqr2ppy8a97.cloudfront.net/favicon/favicon.ico">
+  <meta name="apple-mobile-web-app-title" content="Landy">
+  <meta name="application-name" content="Landy">
+  <meta name="msapplication-TileColor" content="#ff441b">
+  <meta name="msapplication-TileImage" content="https://d2xkqr2ppy8a97.cloudfront.net/favicon/mstile-144x144.png">
+  <meta name="msapplication-config" content="https://d2xkqr2ppy8a97.cloudfront.net/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+  <title>Landy: Put your growth on autopilot.</title>
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="container">
+      <a href="/" class="logo">
+        <img src="assets/images/logo.svg" alt="" data-no-retina />
+      </a>
+      <button type="button" class="nav-open" data-target=".main-nav">
+        <div class="nav-open__btn">Menu</div>
+      </button>
+      <nav class="main-nav">
+        <button type="button" class="nav-close" data-target=".main-nav">
+          <img src="assets/images/close.svg" alt="" data-no-retina>
+        </button>
+        <ul class="main-nav__list">
+          <li class="main-nav__item"><a href="#pricing" class="main-header__link js-scroll href--pricing">Pricing</a></li>
+          <li class="main-nav__item"><a href="#faq" class="main-header__link js-scroll href--faq">FAQ</a></li>
+        </ul>
+        <ul class="main-nav__list">
+          <li class="main-nav__item"><a href="https://app.landy.io/login" class="main-header__link">Log In</a></li>
+          <li class="main-nav__item main-nav__btn"><a href="#sign-up" class="main-header__link main-header__link--accent js-scroll">Sign Up Free</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <div class="jumbotron section-sm-7 section-xs-adaptive">
+    <div class="container">
+      <h1 class="h1">Conversion optimization tool<br/> which puts your growth on autopilot
+        <small>Landy is an essentially new way to deliver the best possible landing page <br/> to every new visitor. Effortlessly and automatically.</small>
+      </h1>
+      <a href="/#sign-up" class="btn btn--red js-scroll">Sign up for free</a>
+    </div>
+    <div class="jumbotron__scroll">
+      <a href="/#about" class="js-scroll xs-hidden jumbotron__how">See how it works</a>
+      <a href="/#about" class="js-scroll icon-arrow-down"></a>
+    </div>
+  </div>
+  <main id="about">
+    <div class="section section--center section-sm-adaptive section-xs-adaptive">
+      <div class="container">
+        <h2 class="h2">
+          Landy collects visitors<br/>
+          traits and behavior
+        </h2>
+        <div class="col-sm-8 col-sm-offset-2 col-xs-12">
+          <div class="collector__parameters">
+            <span>Country</span><span>City</span><span>Language</span><span>Device</span><span>OS</span><span>UTM</span>
+            <br class="xs-hidden" /><span>Browser</span><span>Local time</span><span>Source</span><span>Search keywords</span><span class="collector__parameters-more">More...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section section--light section-sm-adaptive section-xs-adaptive section--robot">
+      <div class="container">
+        <div class="col-md-10 col-md-offset-1 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
+          <div class="robot">
+            <div class="robot__text">
+              <h2 class="h2"><span class="xs-hidden">Carefully analyzes it...</span><span class="sm-hidden md-hidden">Analyzes it...</span>
+            <small>Landy learns what your visitors <span class="underline_red">like</span> and what they <span class="underline_blue">don’t.</span></small></h2>
+            </div>
+            <img src="assets/images/robot.svg" width="190" height="auto" alt="" class="robot__image" data-no-retina>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section section--center section-sm-adaptive section-xs-adaptive">
+      <div class="container">
+        <h2 class="h2">
+          Shows the most suitable <br/> landing page
+          to every visitor
+          <small>Analyzing visitors traits and behavior Landy finds which<br/> landing page will most likely convert each and every visitor.</small>
+        </h2>
+        <div class="col-xs-10 col-xs-offset-1"><img src="assets/images/emojis.gif" width="768" height="auto" alt="" class="img-responsive" data-no-retina></div>
+      </div>
+    </div>
+    <div class="section section--center section--dark xs-hidden section-sm-adaptive">
+      <div class="container">
+        <h2 class="h2">
+          Maximize your conversion rates
+          <small>Instead of using one visitor parameter for targeting, Landy builds model using all available visitor characteristics and behavior. That's why Landy works great where human usually fails.</small>
+        </h2>
+        <img src="assets/images/chart.svg" width="522" height="272" alt="" class="img-responsive" data-no-retina>
+      </div>
+    </div>
+    <div class="section section--center sm-hidden md-hidden section--blue details" id="details">
+      <div class="container">
+        <span>See details</span>
+      </div>
+    </div>
+    <div class="section section--center section-sm-adaptive section-xs-adaptive xs-hidden" id="pricing">
+      <div class="container">
+        <h2 class="h2">Simple pricing for <br/>complex algorithms
+        <small>Landy is <span class="underline_red">totally free</span> until April 1, 2016!</small>
+        </h2>
+        <div class="col-sm-10 col-sm-offset-1 col-xs-12">
+          <div class="pricing clearfix">
+            <div class="col-sm-6 col-xs-12">
+              <div class="pricing__image"><img src="assets/images/free_plan.svg" alt="Free plan" width="64" height="64" class="pricing__image-head" data-no-retina></div>
+              <h3 class="h3">Free mothly quota</h3>
+              <h1 class="h1">$0</h1>
+              <span class="h4">Forever free</span>
+              <p class="text-grey">
+                <span>10 000 predictions</span>
+                <br/><span id="tooltip-one-test" class="tooltip">1 active test</span>
+                <br/><span class="tooltip tooltip-free-training">Free training</span>
+                <br/><span>Email support</span></p>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+              <div class="pricing__image"><img src="assets/images/smarty_plan.svg" alt="Unlimited plan" width="162" height="109" data-no-retina></div>
+              <h3 class="h3">Unlimited</h3>
+              <h1 class="h1">$2</h1>
+              <span class="text-grey">Per 1000 predictions</span>
+              <p class="text-grey"><span id="tooltip-pay-as-you-go" class="tooltip">Pay as you go</span>
+                <br/><span id="tooltip-unlimited-tests" class="tooltip">Unlimited active tests</span>
+                <br/><span class="tooltip tooltip-free-training">Free training</span>
+                <br/><span>Priority support</span>
+              </p>
+            </div>
+          </div>
+          <a href="/#sign-up" class="btn btn--red js-scroll">Start with free account</a>
+        </div>
+      </div>
+    </div>
+    <div class="section section--center section--light section-sm-adaptive section-xs-adaptive xs-hidden" id="faq">
+      <div class="container">
+        <h2 class="h2">Questions &amp; Answers</h2>
+        <div class="col-sm-12">
+          <div class="clearfix">
+            <div class="col-md-5 col-md-offset-1 col-sm-6 text-left qa__col-left">
+              <h4 class="h4">Is it a kind of black magic?</h4>
+              <p class="text-grey">Not exactly. Landy applies machine learning algorithms to find the most convertible landing page for every single visitor based on their traits and behavior.</p>
+              <h4 class="h4">Why you're charging per prediction?</h4>
+              <p class="text-grey">The amount of traffic per test defines data size, which Landy needs to collect and process. More data you have - more computing power we need.</p>
+              <h4 class="h4">What will happen on April 1?</h4>
+              <p class="text-grey">Everyone will be moved to our free plan. It includes 10 000 predictions per month.</p>
+            </div>
+            <div class="col-md-5 col-sm-6 text-left qa__col-right">
+              <h4 class="h4">What is a prediction?</h4>
+              <p class="text-grey">Prediction is an event when Landy shows the most suitable landing page to a visitor. Every time a visitor comes to a page where Landy campaign is trained will count as a prediction.</p>
+              <h4 class="h4">How much time do I need to train Landy?</h4>
+              <p class="text-grey">It totally depends on traffic and conversions. Usually, you need at least 25 conversions per variation to get your first prediction.</p>
+              <h4 class="h4">What happens when I spent my free quota?</h4>
+              <p class="text-grey">We’ll show your default variation. As soon as the billing month is over the quota will be refilled.</p>
+              <br/>
+            </div>
+          </div>
+          <span class="qa__contact">Have more questions? Feel free to reach us on <a href="mailto:friends@landy.io">friends@landy.io</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="section section--center section--dark section--large section--xs-dark section-xs-adaptive section-sm-adaptive" id="sign-up">
+      <div class="container">
+        <h2 class="h2">Get started with a <br class="sm-hidden md-hidden"/> <i>free account</i>
+        </h2>
+        <form class="form form--inline clearfix" action="https://app.landy.io/signup" method="post" id="signUpForm">
+          <div class="form__group form__group_email">
+            <input type="email" placeholder="Email address" name="email">
+          </div>
+          <div class="form__group">
+            <input type="submit" class="btn btn--red btn--large" value="Create free account">
+            <p class="text-grey">no credit card required</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+  <footer class="main-footer">
+    <div class="container">
+      <div class="col-xs-12 col-sm-7 col-md-5 col-md-push-5">
+        <ul class="footer-list xs-fulljustify">
+          <li class="footer-list__item"><a href="#faq" class="footer-list__link js-scroll href--faq">FAQ</a></li>
+          <li class="footer-list__item"><a href="#pricing" class="footer-list__link js-scroll href--pricing">Pricing</a></li>
+          <li class="footer-list__item"><a href="https://blog.landy.io" class="footer-list__link">Blog</a></li>
+        </ul>
+      </div>
+      <div class="col-xs-12 col-sm-5 sm-text-right col-md-4 col-md-pull-5">
+        <span>Made with <img src="assets/images/heart_black.svg" alt="Love" width="14" height="13" data-no-retina> in Saint-Petersburg</span>
+      </div>
+      <div class="col-xs-12  col-md-3 xs-hidden sm-hidden">
+        <ul class="footer-list md-text-right">
+          <li class="footer-list__item"><a href="https://twitter.com/landyml" target="about_blank" class="footer-list__link">Twitter</a></li>
+          <li class="footer-list__item"><a href="https://www.facebook.com/landyml" class="footer-list__link">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <link rel="stylesheet" type="text/css" href="assets/vendors/tooltipster/css/tooltipster.min.css" />
+  <link rel="stylesheet" type="text/css" href="assets/css/tooltipster-theme.min.1447690280.css" />
+  <link rel="stylesheet" href="assets/vendors/iconmoon/iconmoon.min.css" />
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="assets/vendors/retina/retina.min.js"></script>
+  <script src="assets/js/script.min.1450065186.js"></script>
+  <script type="text/javascript" src="assets/vendors/tooltipster/js/jquery.tooltipster.min.js"></script>
+</body>
+
+</html>
