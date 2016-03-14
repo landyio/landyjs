@@ -5,12 +5,15 @@ module.exports = function(grunt) {
 
 
     concat: {
-      dist: {
+      new: {
         src: ['src/uaparser.js', 'src/landy.js'],
         dest: 'temp/landy.js',
       },
+      old: {
+        src: ['src/uaparser.js', 'src/landy_legacy.js'],
+        dest: 'temp/landy.js',
+      },
     },
-
 
     strip_code: {
       options: {
@@ -90,7 +93,8 @@ module.exports = function(grunt) {
 
 
   grunt.registerTask('test', ['connect', 'jasmine']);
-  grunt.registerTask('build', ['test', 'concat', 'strip_code', 'uglify', 'clean']);
+  grunt.registerTask('build', ['test', 'concat:new', 'strip_code', 'uglify', 'clean']);
+  grunt.registerTask('build_old', ['concat:old', 'strip_code', 'uglify', 'clean']);
   grunt.registerTask('deploy', ['build', 'zopfli'])
   grunt.registerTask('default', ['test']);
 
