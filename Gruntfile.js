@@ -53,8 +53,12 @@ module.exports = function(grunt) {
 
 
     clean: {
-      js: ["build/*.js", "!build/*.min.js"],
-      temp: 'temp'
+      build: {
+        src: ['build/landy.js', 'temp']
+      },
+      deploy: {
+      	src: ['build'],
+      }
     },
 
 
@@ -132,12 +136,12 @@ module.exports = function(grunt) {
 
 
   grunt.registerTask('test', ['connect', 'jasmine']);
-  grunt.registerTask('build:new', ['test', 'concat:new', 'strip_code', 'uglify', 'clean']);
+  grunt.registerTask('build:new', ['test', 'concat:new', 'strip_code', 'uglify', 'clean:build']);
   grunt.registerTask('deploy', ['build', 'zopfli'])
   grunt.registerTask('default', ['test']);
 
 
-  grunt.registerTask('build:old', ['concat:old', 'strip_code', 'uglify', 'clean']);
-  grunt.registerTask('deploy:staging:old', ['build:old', 'zopfli:staging', 'aws_s3:staging'])
-  grunt.registerTask('deploy:production:old', ['build:old', 'zopfli:production', 'aws_s3:production'])
+  grunt.registerTask('build:old', ['concat:old', 'strip_code', 'uglify', 'clean:build']);
+  grunt.registerTask('deploy:staging:old', ['build:old', 'zopfli:staging', 'aws_s3:staging', 'clean:deploy'])
+  grunt.registerTask('deploy:production:old', ['build:old', 'zopfli:production', 'aws_s3:production', 'clean:deploy'])
 };
