@@ -152,6 +152,8 @@ function Landy(campaignId, url, type, subtype, goals) {
     }
   }
 
+  this.sendSuccess = sendSuccess;
+
 
   /**
    * Attaching listener to selected selector
@@ -494,6 +496,7 @@ function Landy(campaignId, url, type, subtype, goals) {
       }
     }
   };
+
   /* test-code */
   var api = {};
   api._doPostRequest = doPostRequest;
