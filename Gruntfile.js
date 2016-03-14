@@ -22,7 +22,7 @@ module.exports = function(grunt) {
       },
       target: {
         src: "temp/landy.js",
-        dest: "temp/landy.js"
+        dest: "temp/landy.js",
       }
     },
 
@@ -39,9 +39,14 @@ module.exports = function(grunt) {
 
 
     zopfli: {
-      'compress-plugins': {
+      'production': {
         files: {
           'build/landy.min.js.gz': 'build/landy.min.js'
+        }
+      },
+      staging: {
+        files: {
+          'build/landy.min.<%= grunt.template.today("yyyymmddHHMM") %>.js.gz': 'build/landy.min.js'
         }
       }
     },
@@ -79,6 +84,38 @@ module.exports = function(grunt) {
           base: '.'
         }
       }
+    },
+
+    aws: grunt.file.readJSON('aws.json'),
+
+    aws_s3: {
+      options: {
+        accessKeyId: '<%= aws.AWSAccessKeyId %>',
+        secretAccessKey: '<%= aws.AWSSecretKey %>',
+        region: 'us-west-2',
+        uploadConcurrency: 5,
+        downloadConcurrency: 5,
+        bucket: 'landyjs',
+        gzipRename: 'ext',
+      },
+      staging: {
+        files: [{
+          expand: true,
+          cwd: 'build/',
+          src: '**/landy.min.*.js.gz',
+          dest: 'dev/',
+          action: 'upload',
+        }],
+      },
+      production: {
+        files: [{
+          expand: true,
+          cwd: 'build/',
+          src: '**/landy.min.js.gz',
+          dest: '/',
+          action: 'upload',
+        }],
+      },
     }
   });
 
@@ -90,12 +127,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-zopfli');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-aws-s3');
 
 
   grunt.registerTask('test', ['connect', 'jasmine']);
-  grunt.registerTask('build', ['test', 'concat:new', 'strip_code', 'uglify', 'clean']);
-  grunt.registerTask('build_old', ['concat:old', 'strip_code', 'uglify', 'clean']);
+  grunt.registerTask('build:new', ['test', 'concat:new', 'strip_code', 'uglify', 'clean']);
   grunt.registerTask('deploy', ['build', 'zopfli'])
   grunt.registerTask('default', ['test']);
 
+
+  grunt.registerTask('build:old', ['concat:old', 'strip_code', 'uglify', 'clean']);
+  grunt.registerTask('deploy:staging:old', ['build:old', 'zopfli:staging', 'aws_s3:staging'])
+  grunt.registerTask('deploy:production:old', ['build:old', 'zopfli:production', 'aws_s3:production'])
 };
