@@ -9,9 +9,22 @@ describe('landy.js', function() {
       var parsedUrl = landyParseUrl(url);
       expect(parsedUrl.protocol).toEqual('http:');
       expect(parsedUrl.host).toEqual('www.landy.io:9000');
-      expect(parsedUrl.hostname).toEqual('www.landy.io');
+      expect(parsedUrl.www).toEqual('www.');
+      expect(parsedUrl.hostname).toEqual('landy.io');
       expect(parsedUrl.port).toEqual('9000');
       expect(parsedUrl.pathname).toEqual('/secret/index.html');
+      expect(parsedUrl.search).toEqual('?ad=doge');
+      expect(parsedUrl.hash).toEqual('#kush');
+    });
+
+    it('returns proper url without slash parsed object', function() {
+      var url = 'http://landy.io?ad=doge#kush';
+      var parsedUrl = landyParseUrl(url);
+      expect(parsedUrl.protocol).toEqual('http:');
+      expect(parsedUrl.host).toEqual('landy.io');
+      expect(parsedUrl.hostname).toEqual('landy.io');
+      expect(parsedUrl.port).not.toBeDefined();
+      expect(parsedUrl.pathname).not.toBeDefined();
       expect(parsedUrl.search).toEqual('?ad=doge');
       expect(parsedUrl.hash).toEqual('#kush');
     });
@@ -49,7 +62,7 @@ describe('landy.js', function() {
 
     it('matches urls in simple match mode', function() {
       var url1 = 'http://www.landy.io:9000/secret/index.html?ad=doge#kush';
-      var url2 = 'https://www.landy.io:3333/secret/index.html';
+      var url2 = 'https://landy.io:3333/secret/index.html';
       var type = 'simpleMatches';
       expect(landyCheckUrls(url1, url2, type)).toBe(true);
     });

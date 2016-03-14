@@ -64,7 +64,7 @@ module.exports = function(grunt) {
 
     jasmine: {
       landy: {
-        src: 'src/*.js',
+        src: ['src/uaparser.js', 'src/landy.js'],
         options: {
           specs: 'test/spec/*.js',
           template: 'test/templates/landyio.tmpl',
