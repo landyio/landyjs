@@ -114,6 +114,7 @@ module.exports = function(grunt) {
           src: '**/landy.min.js.gz',
           dest: '/',
           action: 'upload',
+          params: { CacheControl: 'max-age=86400' }
         }],
       },
     }
