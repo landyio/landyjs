@@ -57,7 +57,7 @@ module.exports = function(grunt) {
         src: ['build/landy.js', 'temp']
       },
       deploy: {
-      	src: ['build'],
+        src: ['build'],
       }
     },
 
@@ -121,6 +121,19 @@ module.exports = function(grunt) {
           params: { CacheControl: 'max-age=86400' }
         }],
       },
+    },
+
+    invalidate_cloudfront: {
+      options: {
+        key: '<%= aws.AWSAccessKeyId %>',
+        secret: '<%= aws.AWSSecretKey %>',
+        distribution: 'E3DAQI1QXGFRFL'
+      },
+      production: {
+        files: [{
+          dest: 'landy.min.js'
+        }]
+      }
     }
   });
 
@@ -133,6 +146,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-aws-s3');
+  grunt.loadNpmTasks('grunt-invalidate-cloudfront');
 
 
   grunt.registerTask('test', ['connect', 'jasmine']);
@@ -143,5 +157,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build:old', ['concat:old', 'strip_code', 'uglify', 'clean:build']);
   grunt.registerTask('deploy:staging:old', ['build:old', 'zopfli:staging', 'aws_s3:staging', 'clean:deploy'])
-  grunt.registerTask('deploy:production:old', ['build:old', 'zopfli:production', 'aws_s3:production', 'clean:deploy'])
+  grunt.registerTask('deploy:production:old', ['build:old','zopfli:production', 'aws_s3:production', 'invalidate_cloudfront:production', 'clean:deploy'])
 };

@@ -25,6 +25,7 @@
     "grunt-contrib-connect": "^1.0.0",
     "grunt-contrib-jasmine": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.0",
+    "grunt-invalidate-cloudfront": "^0.1.6",
     "grunt-strip-code": "^0.1.2",
     "grunt-zopfli": "^0.3.2",
     "jasmine-ajax": "^3.2.0"
