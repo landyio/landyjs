@@ -127,7 +127,7 @@ module.exports = function(grunt) {
       options: {
         key: '<%= aws.AWSAccessKeyId %>',
         secret: '<%= aws.AWSSecretKey %>',
-        distribution: 'E3DAQI1QXGFRFL'
+        distribution: '<%= aws.CloudFront %>'
       },
       production: {
         files: [{
