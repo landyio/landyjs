@@ -35,7 +35,7 @@ function landyCheckUrls(url1, url2, compareType) {
     case 'matches':
       result = (url1 === url2);
       break;
-    case 'simpleMatches':
+    case 'simpleMatch':
       var parsedUrl1 = landyParseUrl(url1);
       var parsedUrl2 = landyParseUrl(url2);
       result = (parsedUrl1.hostname === parsedUrl2.hostname &&

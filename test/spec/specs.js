@@ -24,7 +24,7 @@ describe('landy.js', function() {
       expect(parsedUrl.host).toEqual('landy.io');
       expect(parsedUrl.hostname).toEqual('landy.io');
       expect(parsedUrl.port).not.toBeDefined();
-      expect(parsedUrl.pathname).not.toBeDefined();
+      expect(parsedUrl.pathname).toEqual('');
       expect(parsedUrl.search).toEqual('?ad=doge');
       expect(parsedUrl.hash).toEqual('#kush');
     });
@@ -63,14 +63,14 @@ describe('landy.js', function() {
     it('matches urls in simple match mode', function() {
       var url1 = 'http://www.landy.io:9000/secret/index.html?ad=doge#kush';
       var url2 = 'https://landy.io:3333/secret/index.html';
-      var type = 'simpleMatches';
+      var type = 'simpleMatch';
       expect(landyCheckUrls(url1, url2, type)).toBe(true);
     });
-
+ 
     it('fails urls in simple match mode', function() {
       var url1 = 'http://www.landy.io:9000/secret/index.html?ad=doge#kush';
       var url2 = 'https://www.landy.io:3333/secet/index.html';
-      var type = 'simpleMatches';
+      var type = 'simpleMatch';
       expect(landyCheckUrls(url1, url2, type)).toBe(false);
     });
 
