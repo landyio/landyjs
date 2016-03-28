@@ -29,16 +29,15 @@ var landy = {
  * @return {Object}      Parsed url object
  */
 function landyParseUrl(href) {
-  var match = href.match(/^(https?\:)\/\/((www.|)([^:\/?#]*)(?:\:([0-9]+))?)(|\/[^?#]*)(\?[^#]*|)(#.*|)$/);
+  var match = href.match(/^(https?\:)\/\/((?:www.|)([^:\/?#]*)(?:\:([0-9]+))?)(|\/[^?#]*)(\?[^#]*|)(#.*|)$/);
   return match && {
     protocol: match[1],
     host: match[2],
-    www: match[3],
-    hostname: match[4],
-    port: match[5],
-    pathname: match[6],
-    search: match[7],
-    hash: match[8]
+    hostname: match[3],
+    port: match[4],
+    pathname: match[5],
+    search: match[6],
+    hash: match[7]
   };
 }
 
@@ -61,8 +60,10 @@ function landyCheckUrls(url1, url2, compareType) {
     case 'simpleMatch':
       var parsedUrl1 = landyParseUrl(url1);
       var parsedUrl2 = landyParseUrl(url2);
+      var pathname1 = parsedUrl1.pathname.replace(/\/$/, '');
+      var pathname2 = parsedUrl2.pathname.replace(/\/$/, '');
       result = (parsedUrl1.hostname === parsedUrl2.hostname &&
-        parsedUrl1.pathname === parsedUrl2.pathname);
+        pathname1 === pathname2);
       break;
     default:
       result = false;
@@ -416,7 +417,7 @@ function Landy(campaignId, url, type, subtype, goals) {
   function applyVariation(elements) {
     switch (type) {
       case 'split':
-        w.location = elements.url;
+        if (url !== elements.url) w.location = elements.url;
         break;
 
       case 'ab':
