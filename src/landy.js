@@ -6,7 +6,7 @@
  * @return {Object}      Parsed url object
  */
 function landyParseUrl(href) {
-  var match = href.match(/^(https?\:)\/\/((?:www.|)([^:\/?#]*)(?:\:([0-9]+))?)(|[^?#]*)(\?[^#]*|)(#.*|)$/);
+  var match = href.match(/^(https?\:)\/\/((?:www.|)([^:\/?#]*)(?:\:([0-9]+))?)(|\/[^?#]*)(\?[^#]*|)(#.*|)$/);
   return match && {
     protocol: match[1],
     host: match[2],
