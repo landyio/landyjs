@@ -230,16 +230,15 @@ function Landy(campaignId, url, type, subtype, goals) {
   }
 
 
-  // Creating an object from parsed User-Agent
-  var parser = new UAParser();
-  var parsedUA = parser.getResult();
-
-
   /**
    * Generates visitors identity
    * @return {Object} With visitor characteristics
    */
   function generateIdentity() {
+    // Creating an object from parsed User-Agent
+    var parser = new UAParser();
+    var parsedUA = parser.getResult();
+    
     var userData = {
       browser: (function() {
         return parsedUA.browser.name;
@@ -479,7 +478,7 @@ function Landy(campaignId, url, type, subtype, goals) {
       var cookie = getCookie(variationsKey);
 
       // Make a response to ZAX, if variation is not in cookie
-      if (!cookie || cookie === '[]') {
+      if (!cookie) {
         var requestURL = zaxUrl + '/app/' + campaignId + '/event/predict';
         doPostRequest(requestURL, JSON.stringify(data), function saveAndApplyVariation(response) {
           if (response) {
