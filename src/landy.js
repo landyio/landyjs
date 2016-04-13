@@ -27,18 +27,18 @@ function landyParseUrl(href) {
  */
 function landyCheckUrls(currentUrl, campaignUrl, compareType) {
   var result;
-  var clearedUrl1;
-  var clearedUrl2;
+  var clearedCurrentlUrl;
+  var clearedCampaignUrl;
   switch (compareType) {
     case 'contains':
-      clearedUrl1 = currentUrl.replace(/\/$/, '');
-      clearedUrl2 = campaignUrl.replace(/\/$/, '');
-      result = (clearedUrl1.indexOf(clearedUrl2) !== -1);
+      clearedCurrentlUrl = currentUrl.replace(/\/$/, '');
+      clearedCampaignUrl = campaignUrl.replace(/\/$/, '');
+      result = (clearedCurrentlUrl.indexOf(clearedCampaignUrl) !== -1);
       break;
     case 'matches':
-      clearedUrl1 = currentUrl.replace(/\/$/, '');
-      clearedUrl2 = campaignUrl.replace(/\/$/, '');
-      result = (clearedUrl1 === clearedUrl2);
+      clearedCurrentlUrl = currentUrl.replace(/\/$/, '');
+      clearedCampaignUrl = campaignUrl.replace(/\/$/, '');
+      result = (clearedCurrentlUrl === clearedCampaignUrl);
       break;
     case 'simpleMatch':
       var parsedUrl1 = landyParseUrl(currentUrl);
