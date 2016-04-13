@@ -105,7 +105,7 @@ function Landy(campaignId, url, type, subtype, goals) {
    * it will set a cookie at the highest level possible
    * and return it as top-level domain
    * http://rossscrivener.co.uk/blog/javascript-get-domain-exclude-subdomain
-   * @return {String} [description]
+   * @return {String} top domain
    */
   function getDomain() {
     var i = 0;
