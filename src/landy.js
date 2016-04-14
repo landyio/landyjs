@@ -41,16 +41,16 @@ function landyCheckUrls(currentUrl, campaignUrl, compareType) {
       result = (clearedCurrentlUrl === clearedCampaignUrl);
       break;
     case 'simpleMatch':
-      var parsedUrl1 = landyParseUrl(currentUrl);
-      var parsedUrl2 = landyParseUrl(campaignUrl);
-      if (!parsedUrl1 || !parsedUrl2) {
+      var parsedCurrentUrl = landyParseUrl(currentUrl);
+      var parsedCampaignUrl = landyParseUrl(campaignUrl);
+      if (!parsedCurrentUrl || !parsedCampaignUrl) {
         result = false;
         break;
       }
-      var pathname1 = parsedUrl1.pathname.replace(/\/$/, '');
-      var pathname2 = parsedUrl2.pathname.replace(/\/$/, '');
-      result = (parsedUrl1.hostname === parsedUrl2.hostname &&
-        pathname1 === pathname2);
+      var pathnameCurrentUrl = parsedCurrentUrl.pathname.replace(/\/$/, '');
+      var pathnameCampaignUrl = parsedCampaignUrl.pathname.replace(/\/$/, '');
+      result = (parsedCurrentUrl.hostname === parsedCampaignUrl.hostname &&
+        pathnameCurrentUrl === pathnameCampaignUrl);
       break;
     default:
       result = false;
@@ -120,6 +120,8 @@ function Landy(campaignId, url, type, subtype, goals) {
     return domain;
   }
 
+  var topLevelDomain = getDomain() || d.domain;
+
   // Set cookie or localStorage(for variations) variable
   function setCookie(cookieName, value, lifetime) {
     var name = cookieName + '_' + campaignId;
@@ -132,8 +134,7 @@ function Landy(campaignId, url, type, subtype, goals) {
     } else {
       timestamp.setTime(timeExpire);
       var expires = 'expires=' + timestamp.toUTCString();
-      var domain = getDomain() || d.domain;
-      var cookie = name + '=' + value + ';path=/;domain=.' + domain + ';' + expires;
+      var cookie = name + '=' + value + ';path=/;domain=.' + topLevelDomain + ';' + expires;
       d.cookie = cookie;
     }
   }
@@ -238,7 +239,7 @@ function Landy(campaignId, url, type, subtype, goals) {
     // Creating an object from parsed User-Agent
     var parser = new UAParser();
     var parsedUA = parser.getResult();
-    
+
     var userData = {
       browser: (function() {
         return parsedUA.browser.name;

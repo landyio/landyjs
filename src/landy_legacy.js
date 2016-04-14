@@ -50,30 +50,30 @@ function landyParseUrl(href) {
  */
 function landyCheckUrls(currentUrl, campaignUrl, compareType) {
   var result;
-  var clearedUrl1;
-  var clearedUrl2;
+  var clearedCurrentlUrl;
+  var clearedCampaignUrl;
   switch (compareType) {
     case 'contains':
-      clearedUrl1 = currentUrl.replace(/\/$/, '');
-      clearedUrl2 = campaignUrl.replace(/\/$/, '');
-      result = (clearedUrl1.indexOf(clearedUrl2) !== -1);
+      clearedCurrentlUrl = currentUrl.replace(/\/$/, '');
+      clearedCampaignUrl = campaignUrl.replace(/\/$/, '');
+      result = (clearedCurrentlUrl.indexOf(clearedCampaignUrl) !== -1);
       break;
     case 'matches':
-      clearedUrl1 = currentUrl.replace(/\/$/, '');
-      clearedUrl2 = campaignUrl.replace(/\/$/, '');
-      result = (clearedUrl1 === clearedUrl2);
+      clearedCurrentlUrl = currentUrl.replace(/\/$/, '');
+      clearedCampaignUrl = campaignUrl.replace(/\/$/, '');
+      result = (clearedCurrentlUrl === clearedCampaignUrl);
       break;
     case 'simpleMatch':
-      var parsedUrl1 = landyParseUrl(currentUrl);
-      var parsedUrl2 = landyParseUrl(campaignUrl);
-      if (!parsedUrl1 || !parsedUrl2) {
+      var parsedCurrentUrl = landyParseUrl(currentUrl);
+      var parsedCampaignUrl = landyParseUrl(campaignUrl);
+      if (!parsedCurrentUrl || !parsedCampaignUrl) {
         result = false;
         break;
       }
-      var pathname1 = parsedUrl1.pathname.replace(/\/$/, '');
-      var pathname2 = parsedUrl2.pathname.replace(/\/$/, '');
-      result = (parsedUrl1.hostname === parsedUrl2.hostname &&
-        pathname1 === pathname2);
+      var pathnameCurrentUrl = parsedCurrentUrl.pathname.replace(/\/$/, '');
+      var pathnameCampaignUrl = parsedCampaignUrl.pathname.replace(/\/$/, '');
+      result = (parsedCurrentUrl.hostname === parsedCampaignUrl.hostname &&
+        pathnameCurrentUrl === pathnameCampaignUrl);
       break;
     default:
       result = false;
@@ -129,7 +129,7 @@ function Landy(campaignId, url, type, subtype, goals) {
    * it will set a cookie at the highest level possible
    * and return it as top-level domain
    * http://rossscrivener.co.uk/blog/javascript-get-domain-exclude-subdomain
-   * @return {String} [description]
+   * @return {String} top-level domain
    */
   function getDomain() {
     var i = 0;
@@ -144,6 +144,8 @@ function Landy(campaignId, url, type, subtype, goals) {
     return domain;
   }
 
+  var topLevelDomain = getDomain() || d.domain;
+
   // Set cookie or localStorage(for variations) variable
   function setCookie(cookieName, value, lifetime) {
     var name = cookieName + '_' + campaignId;
@@ -156,8 +158,7 @@ function Landy(campaignId, url, type, subtype, goals) {
     } else {
       timestamp.setTime(timeExpire);
       var expires = 'expires=' + timestamp.toUTCString();
-      var domain = getDomain() || d.domain;
-      var cookie = name + '=' + value + ';path=/;domain=.' + domain + ';' + expires;
+      var cookie = name + '=' + value + ';path=/;domain=.' + topLevelDomain + ';' + expires;
       d.cookie = cookie;
     }
   }
