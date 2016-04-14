@@ -3,3 +3,4 @@ src/assets
 src/template*
 build/
 aws.json
+src/*.html

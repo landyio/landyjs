@@ -9,7 +9,7 @@ module.exports = function(grunt) {
         src: ['src/uaparser.js', 'src/landy.js'],
         dest: 'temp/landy.js',
       },
-      old: {
+      legacy: {
         src: ['src/uaparser.js', 'src/landy_legacy.js'],
         dest: 'temp/landy.js',
       },
@@ -64,6 +64,21 @@ module.exports = function(grunt) {
 
     jasmine: {
       landy: {
+        src: ['src/uaparser.js', 'src/landy.js'],
+        options: {
+          specs: 'test/spec/*.js',
+          template: 'test/templates/landyio.tmpl',
+          helpers: 'test/helpers/*.js',
+          '--web-security': false,
+          '--local-to-remote-url-access': true,
+          '--ignore-ssl-errors': true,
+          host: 'http://0.0.0.0:9001',
+          vendor: [
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'
+          ]
+        }
+      },
+      landy_legacy: {
         src: ['src/uaparser.js', 'src/landy.js'],
         options: {
           specs: 'test/spec/*.js',
@@ -149,13 +164,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-invalidate-cloudfront');
 
 
-  grunt.registerTask('test', ['connect', 'jasmine']);
+  grunt.registerTask('test', ['connect', 'jasmine:landy']);
+  grunt.registerTask('test:legacy', ['connect', 'jasmine:landy_legacy']);
   grunt.registerTask('build:new', ['test', 'concat:new', 'strip_code', 'uglify', 'clean:build']);
   grunt.registerTask('deploy', ['build', 'zopfli'])
   grunt.registerTask('default', ['test']);
 
 
-  grunt.registerTask('build:old', ['concat:old', 'strip_code', 'uglify', 'clean:build']);
-  grunt.registerTask('deploy:staging:old', ['build:old', 'zopfli:staging', 'aws_s3:staging', 'clean:deploy'])
-  grunt.registerTask('deploy:production:old', ['build:old','zopfli:production', 'aws_s3:production', 'invalidate_cloudfront:production', 'clean:deploy'])
+  grunt.registerTask('build:legacy', ['concat:legacy', 'strip_code', 'uglify', 'clean:build']);
+  grunt.registerTask('deploy:staging:legacy', ['build:legacy', 'zopfli:staging', 'aws_s3:staging', 'clean:deploy'])
+  grunt.registerTask('deploy:production:legacy', ['build:legacy','zopfli:production', 'aws_s3:production', 'invalidate_cloudfront:production', 'clean:deploy'])
 };

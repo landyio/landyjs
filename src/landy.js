@@ -6,40 +6,51 @@
  * @return {Object}      Parsed url object
  */
 function landyParseUrl(href) {
-  var match = href.match(/^(https?\:)\/\/((www.|)([^:\/?#]*)(?:\:([0-9]+))?)(|\/[^?#]*)(\?[^#]*|)(#.*|)$/);
+  var match = href.match(/^(https?\:)\/\/((?:www.|)([^:\/?#]*)(?:\:([0-9]+))?)(|\/[^?#]*)(\?[^#]*|)(#.*|)$/);
   return match && {
     protocol: match[1],
     host: match[2],
-    www: match[3],
-    hostname: match[4],
-    port: match[5],
-    pathname: match[6],
-    search: match[7],
-    hash: match[8]
+    hostname: match[3],
+    port: match[4],
+    pathname: match[5],
+    search: match[6],
+    hash: match[7]
   };
 }
 
 /**
  * Compare current and campaign urls
- * @param  {String} url1  Current url
- * @param  {String} url2  Campaign url
+ * @param  {String} currentUrl  Current url
+ * @param  {String} campaignUrl  Campaign url
  * @param  {String} compareType  Type of comparison
  * @return {Boolean}      does url matches
  */
-function landyCheckUrls(url1, url2, compareType) {
+function landyCheckUrls(currentUrl, campaignUrl, compareType) {
   var result;
+  var clearedCurrentlUrl;
+  var clearedCampaignUrl;
   switch (compareType) {
     case 'contains':
-      result = (url2.indexOf(url1) !== -1);
+      clearedCurrentlUrl = currentUrl.replace(/\/$/, '');
+      clearedCampaignUrl = campaignUrl.replace(/\/$/, '');
+      result = (clearedCurrentlUrl.indexOf(clearedCampaignUrl) !== -1);
       break;
     case 'matches':
-      result = (url1 === url2);
+      clearedCurrentlUrl = currentUrl.replace(/\/$/, '');
+      clearedCampaignUrl = campaignUrl.replace(/\/$/, '');
+      result = (clearedCurrentlUrl === clearedCampaignUrl);
       break;
     case 'simpleMatch':
-      var parsedUrl1 = landyParseUrl(url1);
-      var parsedUrl2 = landyParseUrl(url2);
-      result = (parsedUrl1.hostname === parsedUrl2.hostname &&
-        parsedUrl1.pathname === parsedUrl2.pathname);
+      var parsedCurrentUrl = landyParseUrl(currentUrl);
+      var parsedCampaignUrl = landyParseUrl(campaignUrl);
+      if (!parsedCurrentUrl || !parsedCampaignUrl) {
+        result = false;
+        break;
+      }
+      var pathnameCurrentUrl = parsedCurrentUrl.pathname.replace(/\/$/, '');
+      var pathnameCampaignUrl = parsedCampaignUrl.pathname.replace(/\/$/, '');
+      result = (parsedCurrentUrl.hostname === parsedCampaignUrl.hostname &&
+        pathnameCurrentUrl === pathnameCampaignUrl);
       break;
     default:
       result = false;
@@ -88,6 +99,29 @@ function Landy(campaignId, url, type, subtype, goals) {
     return result;
   }
 
+  /**
+   * Loops through the parts of a full hostname and
+   * tries to set a cookie on that domain,
+   * it will set a cookie at the highest level possible
+   * and return it as top-level domain
+   * http://rossscrivener.co.uk/blog/javascript-get-domain-exclude-subdomain
+   * @return {String} top domain
+   */
+  function getDomain() {
+    var i = 0;
+    var domain = d.domain;
+    var p = domain.split('.');
+    var s = '_gd' + (new Date()).getTime();
+    while (i < (p.length - 1) && d.cookie.indexOf(s + '=' + s) === -1) {
+      domain = p.slice(-1 - (++i)).join('.');
+      d.cookie = s + '=' + s + ';domain=' + domain + ';';
+    }
+    d.cookie = s + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;domain=' + domain + ';';
+    return domain;
+  }
+
+  var topLevelDomain = getDomain() || d.domain;
+
   // Set cookie or localStorage(for variations) variable
   function setCookie(cookieName, value, lifetime) {
     var name = cookieName + '_' + campaignId;
@@ -100,7 +134,7 @@ function Landy(campaignId, url, type, subtype, goals) {
     } else {
       timestamp.setTime(timeExpire);
       var expires = 'expires=' + timestamp.toUTCString();
-      var cookie = name + '=' + value + ';path=/;domain=.' + d.domain + ';' + expires;
+      var cookie = name + '=' + value + ';path=/;domain=.' + topLevelDomain + ';' + expires;
       d.cookie = cookie;
     }
   }
@@ -197,16 +231,15 @@ function Landy(campaignId, url, type, subtype, goals) {
   }
 
 
-  // Creating an object from parsed User-Agent
-  var parser = new UAParser();
-  var parsedUA = parser.getResult();
-
-
   /**
    * Generates visitors identity
    * @return {Object} With visitor characteristics
    */
   function generateIdentity() {
+    // Creating an object from parsed User-Agent
+    var parser = new UAParser();
+    var parsedUA = parser.getResult();
+
     var userData = {
       browser: (function() {
         return parsedUA.browser.name;
@@ -393,7 +426,7 @@ function Landy(campaignId, url, type, subtype, goals) {
   function applyVariation(elements) {
     switch (type) {
       case 'split':
-        w.location = elements.url;
+        if (url !== elements.url) w.location = elements.url;
         break;
 
       case 'ab':
@@ -446,7 +479,7 @@ function Landy(campaignId, url, type, subtype, goals) {
       var cookie = getCookie(variationsKey);
 
       // Make a response to ZAX, if variation is not in cookie
-      if (!cookie || cookie === '[]') {
+      if (!cookie) {
         var requestURL = zaxUrl + '/app/' + campaignId + '/event/predict';
         doPostRequest(requestURL, JSON.stringify(data), function saveAndApplyVariation(response) {
           if (response) {
@@ -503,6 +536,7 @@ function Landy(campaignId, url, type, subtype, goals) {
   api._doPostRequest = doPostRequest;
   api._sendSuccess = sendSuccess;
   api._setListener = setListener;
+  api._getDomain = getDomain;
   api._getCookie = getCookie;
   api._generateUid = generateUid;
   api._generateIdentity = generateIdentity;

@@ -9,7 +9,6 @@ describe('landy.js', function() {
       var parsedUrl = landyParseUrl(url);
       expect(parsedUrl.protocol).toEqual('http:');
       expect(parsedUrl.host).toEqual('www.landy.io:9000');
-      expect(parsedUrl.www).toEqual('www.');
       expect(parsedUrl.hostname).toEqual('landy.io');
       expect(parsedUrl.port).toEqual('9000');
       expect(parsedUrl.pathname).toEqual('/secret/index.html');
@@ -33,8 +32,15 @@ describe('landy.js', function() {
   describe('landyCheckUrls', function() {
     /* global landyCheckUrls */
     it('matches urls in contains mode', function() {
-      var url1 = 'landy.io:9000/secret';
-      var url2 = 'http://www.landy.io:9000/secret/index.html?ad=doge#kush';
+      var url1 = 'http://www.landy.io:9000/secret/index.html?ad=doge#kush';
+      var url2 = 'landy.io:9000/secret';
+      var type = 'contains';
+      expect(landyCheckUrls(url1, url2, type)).toBe(true);
+    });
+
+    it('matches urls in contains mode with trailing slash in location', function() {
+      var url1 = 'http://www.landy.io';
+      var url2 = 'http://www.landy.io/';
       var type = 'contains';
       expect(landyCheckUrls(url1, url2, type)).toBe(true);
     });
@@ -60,16 +66,44 @@ describe('landy.js', function() {
       expect(landyCheckUrls(url1, url2, type)).toBe(false);
     });
 
-    it('matches urls in simple match mode', function() {
+    it('matches complex urls in simple match mode', function() {
       var url1 = 'http://www.landy.io:9000/secret/index.html?ad=doge#kush';
       var url2 = 'https://landy.io:3333/secret/index.html';
       var type = 'simpleMatch';
       expect(landyCheckUrls(url1, url2, type)).toBe(true);
     });
- 
+
+    it('matches urls with trailing slash after domain in simple match mode', function() {
+      var url1 = 'http://www.landy.io:9000/';
+      var url2 = 'http://www.landy.io:9000';
+      var type = 'simpleMatch';
+      expect(landyCheckUrls(url1, url2, type)).toBe(true);
+    });
+
+    it('matches urls with trailing slash after path in simple match mode', function() {
+      var url1 = 'http://www.landy.io:9000/the/super/path/';
+      var url2 = 'https://www.landy.io:9000/the/super/path';
+      var type = 'simpleMatch';
+      expect(landyCheckUrls(url1, url2, type)).toBe(true);
+    });
+
+    it('matches urls with trailing slash after path and search in simple match mode', function() {
+      var url1 = 'http://www.landy.io:9000/the/super/path/?q=foo';
+      var url2 = 'https://www.landy.io:9000/the/super/path?q=foo';
+      var type = 'simpleMatch';
+      expect(landyCheckUrls(url1, url2, type)).toBe(true);
+    });
+
     it('fails urls in simple match mode', function() {
       var url1 = 'http://www.landy.io:9000/secret/index.html?ad=doge#kush';
       var url2 = 'https://www.landy.io:3333/secet/index.html';
+      var type = 'simpleMatch';
+      expect(landyCheckUrls(url1, url2, type)).toBe(false);
+    });
+
+    it('fails with wrong url in simple match mode', function() {
+      var url1 = 'http://www.landy.io:9000/secret/index.html?ad=doge#kush';
+      var url2 = 'landy.io:3333/secet/index.html';
       var type = 'simpleMatch';
       expect(landyCheckUrls(url1, url2, type)).toBe(false);
     });
