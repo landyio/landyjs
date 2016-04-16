@@ -1,4 +1,47 @@
-/* global UAParser */
+/* global UAParser, landyActiveCampaigns */
+
+/**
+ * Go through campaigns Array and initialize
+ * Landy if current url has installed campaign
+ * or has any goals on it
+ * @param  {Array} campaignList List of active campaigns
+ */
+function startLandy(campaignList) {
+  for (var i = campaignList.length - 1; i >= 0; i--) {
+    var cfg = campaignList[i];
+    var validCampaignUrl = landyCheckUrls(window.location.href,
+                                          cfg.url,
+                                          cfg.subtype);
+    var campaign;
+
+    if (validCampaignUrl) {
+      campaign = new Landy(cfg.id,
+                               cfg.url,
+                               cfg.type,
+                               cfg.subtype,
+                               cfg.g);
+      campaign.init();
+    } else if (typeof cfg.g !== 'undefined') {
+      for (var k = cfg.g.length - 1; k >= 0; k--) {
+        var goal = cfg.g[k];
+        if (goal.event === 'visit') {
+          var validGoalUrl = landyCheckUrls(window.location.href,
+                                            goal.value,
+                                            goal.type);
+          if (validGoalUrl) {
+            campaign = new Landy(cfg.id,
+                               cfg.url,
+                               cfg.type,
+                               cfg.subtype);
+
+            campaign.sendSuccess();
+          }
+        }
+      }
+    }
+  }
+}
+
 
 /**
  * Parse url
@@ -464,7 +507,6 @@ function Landy(campaignId, url, type, subtype, goals) {
     // Get uid from cookie and generate if it does not exists
     // TODO: (dtsepelev) Not sure how showd it work on cross-domain
     var uid = getCookie(userIdKey) || generateUid();
-
     var data = {
       'session': uid,
       'timestamp': Date.now(),
@@ -514,11 +556,10 @@ function Landy(campaignId, url, type, subtype, goals) {
         var goal = goals[i];
         switch (goal.event) {
           case 'visit':
-            if (landyCheckUrls(goal.value, w.location.href, goal.type)) {
+            if (landyCheckUrls(w.location.href, goal.value, goal.type)) {
               sendSuccess();
             }
             break;
-
           case 'click':
             if (urlIsCorrect) {
               w.addEventListener('load', setListener(goal.value), false);

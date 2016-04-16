@@ -66,7 +66,7 @@ module.exports = function(grunt) {
       landy: {
         src: ['src/uaparser.js', 'src/landy.js'],
         options: {
-          specs: 'test/spec/*.js',
+          specs: 'test/spec/specs-universal.js',
           template: 'test/templates/landyio.tmpl',
           helpers: 'test/helpers/*.js',
           '--web-security': false,
@@ -81,7 +81,7 @@ module.exports = function(grunt) {
       landy_legacy: {
         src: ['src/uaparser.js', 'src/landy.js'],
         options: {
-          specs: 'test/spec/*.js',
+          specs: 'test/spec/specs-legacy.js',
           template: 'test/templates/landyio.tmpl',
           helpers: 'test/helpers/*.js',
           '--web-security': false,
