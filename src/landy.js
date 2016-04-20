@@ -1,4 +1,4 @@
-/* global UAParser, landyActiveCampaigns */
+/* global UAParser, landyCampaigns */
 
 /**
  * Go through campaigns Array and initialize
@@ -589,4 +589,8 @@ function Landy(campaignId, url, type, subtype, goals) {
   api._timeStorageExpireId = timeStorageExpireId;
   this.api = api;
   /* end-test-code */
+}
+
+if (landyCampaigns && landyCampaigns.length > 0) {
+  startLandy(landyCampaigns);
 }
