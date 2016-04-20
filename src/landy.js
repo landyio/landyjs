@@ -1,4 +1,4 @@
-/* global UAParser, landyCampaigns */
+/* global UAParser, _landyCampaigns */
 
 /**
  * Go through campaigns Array and initialize
@@ -591,6 +591,6 @@ function Landy(campaignId, url, type, subtype, goals) {
   /* end-test-code */
 }
 
-if (landyCampaigns && landyCampaigns.length > 0) {
-  startLandy(landyCampaigns);
+if (_landyCampaigns && _landyCampaigns.length > 0) {
+  startLandy(_landyCampaigns);
 }
