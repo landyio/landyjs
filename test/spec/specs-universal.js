@@ -120,7 +120,7 @@ describe('landy.js', function() {
   describe('startLandy', function() {
     /* global startLandy, campaignsWithValidUrl, campaignsWithValidGoal */
 
-    it('should initialize Landy campaign on correct url', function() {
+    it('should initialize Landy if user is on correct campaign url', function() {
       var OriginalConstructor = Landy;
       var landyObj;
 
@@ -133,7 +133,7 @@ describe('landy.js', function() {
       expect(landyObj.init).toHaveBeenCalled();
     });
 
-    it('should initialize Landy campaign on correct goal url', function() {
+    it('should send success if user is on correct goal url', function() {
       var OriginalConstructor = Landy;
       var landyObj;
 
