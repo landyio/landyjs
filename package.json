@@ -2,7 +2,7 @@
   "name": "landyjs",
   "version": "1.0.0",
   "description": "Landy analytics script",
-  "main": "landy.js",
+  "main": "lib/landy.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
