@@ -7,9 +7,10 @@
  * @param  {Array} campaignList List of active campaigns
  */
 function startLandy(campaignList) {
+  var currentUrl = window.location.href;
   for (var i = campaignList.length - 1; i >= 0; i--) {
     var cfg = campaignList[i];
-    var validCampaignUrl = landyCheckUrls(window.location.href,
+    var validCampaignUrl = landyCheckUrls(currentUrl,
                                           cfg.url,
                                           cfg.subtype);
     var campaign;
@@ -25,7 +26,7 @@ function startLandy(campaignList) {
       for (var k = cfg.g.length - 1; k >= 0; k--) {
         var goal = cfg.g[k];
         if (goal.event === 'visit') {
-          var validGoalUrl = landyCheckUrls(window.location.href,
+          var validGoalUrl = landyCheckUrls(currentUrl,
                                             goal.value,
                                             goal.type);
           if (validGoalUrl) {
