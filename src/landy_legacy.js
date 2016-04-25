@@ -538,7 +538,7 @@ function Landy(campaignId, url, type, subtype, goals) {
         var goal = goals[i];
         switch (goal.event) {
           case 'visit':
-            if (landyCheckUrls(goal.value, w.location.href, goal.type)) {
+            if (landyCheckUrls(w.location.href, goal.value, goal.type)) {
               sendSuccess();
             }
             break;
