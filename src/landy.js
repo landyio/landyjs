@@ -22,7 +22,7 @@ function startLandy(campaignList) {
                                cfg.subtype,
                                cfg.g);
       campaign.init();
-    } else if (typeof cfg.g !== 'undefined') {
+    } else if (Object.prototype.toString.call(cfg.g) === '[object Array]') {
       for (var k = cfg.g.length - 1; k >= 0; k--) {
         var goal = cfg.g[k];
         if (goal.event === 'visit') {
@@ -549,7 +549,7 @@ function Landy(campaignId, url, type, subtype, goals) {
       }
     }
     // Check goals array and execute on success
-    if (typeof goals !== 'undefined') {
+    if (Object.prototype.toString.call(goals) === '[object Array]') {
       var i;
       var max;
 
