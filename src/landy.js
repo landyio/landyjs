@@ -30,10 +30,7 @@ function startLandy(campaignList) {
                                             goal.value,
                                             goal.type);
           if (validGoalUrl) {
-            campaign = new Landy(cfg.id,
-                               cfg.url,
-                               cfg.type,
-                               cfg.subtype);
+            campaign = new Landy(cfg.id);
 
             campaign.sendSuccess();
           }
