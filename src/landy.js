@@ -503,7 +503,7 @@ function Landy(campaignId, url, type, subtype, goals) {
    */
   this.init = function init() {
     // Get uid from cookie and generate if it does not exists
-    // TODO: (dtsepelev) Not sure how showd it work on cross-domain
+    // TODO: (dtsepelev) Not sure how should it work on cross-domain
     var uid = getCookie(userIdKey) || generateUid();
     var data = {
       'session': uid,
@@ -535,9 +535,9 @@ function Landy(campaignId, url, type, subtype, goals) {
               default:
                 return;
             }
-            applyVariation(variationInResponse);
             setCookie(userIdKey, uid, 360);
             setCookie(variationsKey, JSON.stringify(variationInResponse), 30);
+            applyVariation(variationInResponse);
           }
         });
       } else {
