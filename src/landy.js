@@ -190,7 +190,7 @@ function Landy(campaignId, url, type, subtype, goals) {
     var xhr = new XMLHttpRequest();
     if (xhr) {
       xhr.open('POST', requestURL, true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('Content-Type', 'text/plain');
       xhr.onreadystatechange = function onreadystatechange() {
         if (xhr.readyState === 4 && xhr.status === 200) {
           var resp = (xhr.responseText) ? JSON.parse(xhr.responseText) : true;

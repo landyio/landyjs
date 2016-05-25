@@ -234,10 +234,11 @@ describe('landy.js', function() {
         /* global zaxResponses, abResponseText */
         var requestOnCorrectUrl;
         var api;
-        var uid;
         var data;
         var campaign;
         var predictUrl;
+        var parsedBody;
+        var uid;
 
         beforeAll(function() {
           localStorage.clear();
@@ -272,7 +273,13 @@ describe('landy.js', function() {
 
           requestOnCorrectUrl.respondWith(zaxResponses.predict.ab);
 
-          uid = requestOnCorrectUrl.data().session;
+          var body = requestOnCorrectUrl.data();
+
+          for (var key in body) {
+            if (!body.hasOwnProperty(key)) continue;
+            parsedBody = JSON.parse(key);
+            uid = parsedBody.session;
+          }
         });
 
         afterAll(function() {
@@ -286,10 +293,9 @@ describe('landy.js', function() {
 
 
         it('should send proper request body', function() {
-          var body = requestOnCorrectUrl.data();
-          expect(typeof (body.identity)).toEqual('object');
-          expect(body.identity.browser).toEqual('PhantomJS');
-          expect(typeof (body.timestamp)).toEqual('number');
+          expect(typeof (parsedBody.identity)).toEqual('object');
+          expect(parsedBody.identity.browser).toEqual('PhantomJS');
+          expect(typeof (parsedBody.timestamp)).toEqual('number');
           expect(uid.length).toEqual(36);
         });
 
